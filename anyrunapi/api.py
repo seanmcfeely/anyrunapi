@@ -6,10 +6,11 @@ import json
 import logging
 import requests
 
-class AnyRunClient():
+
+class AnyRunClient:
     logger = logging.getLogger("anyrunapi.AnyRunClient")
 
-    def __init__(self, api_key, host='api.any.run', verify_ssl=True):
+    def __init__(self, api_key, host="api.any.run", verify_ssl=True):
         self.api_key = api_key
         self.host = host
         self.url_api_base = f"https://{host}/v1/"
@@ -18,7 +19,7 @@ class AnyRunClient():
 
     def _request(self, url, stream=True):
         logging.debug(f"making {url} request.")
-        r = requests.get(url, headers={'Authorization': f"API-Key {self.api_key}"}, stream=stream)
+        r = requests.get(url, headers={"Authorization": f"API-Key {self.api_key}"}, stream=stream)
         r.raise_for_status()
         return r
 
@@ -47,20 +48,18 @@ class AnyRunClient():
         return json.dumps(r.json(), indent=2, sort_keys=True)
 
     def get_history(self):
-        """Get analysis history for this account.
-        """
+        """Get analysis history for this account."""
         r = self._api_request("analysis")
         r.raise_for_status()
         return json.dumps(r.json(), indent=2, sort_keys=True)
 
     def get_report(self, task, write_path=False):
-        """Get an analysis report by it's task id. return json unless write_path.
-        """
+        """Get an analysis report by it's task id. return json unless write_path."""
         r = self._api_request(f"analysis/{task}")
         r.raise_for_status()
         if write_path:
             try:
-                with open(write_path, 'w') as f:
+                with open(write_path, "w") as f:
                     f.write(json.dumps(r.json(), indent=2, sort_keys=True))
                 if os.path.exists(write_path):
                     logging.info(f"Wrote {write_path}")
@@ -78,7 +77,7 @@ class AnyRunClient():
         r.raise_for_status
         if write_path:
             try:
-                with open(write_path, 'w') as f:
+                with open(write_path, "w") as f:
                     f.write(json.dumps(r.json(), indent=2, sort_keys=True))
                 if os.path.exists(write_path):
                     logging.info(f"Wrote {write_path}")
@@ -96,7 +95,7 @@ class AnyRunClient():
         r.raise_for_status
         if write_path:
             try:
-                with open(write_path, 'w') as f:
+                with open(write_path, "w") as f:
                     f.write(json.dumps(r.json(), indent=2, sort_keys=True))
                 if os.path.exists(write_path):
                     logging.info(f"Wrote {write_path}")
@@ -115,7 +114,7 @@ class AnyRunClient():
         if not write_path:
             write_path = f"{task}.anyrun.pcap"
         try:
-            with open(write_path, 'wb') as f:
+            with open(write_path, "wb") as f:
                 for chunk in r.iter_content(1024):
                     f.write(chunk)
             if os.path.exists(write_path):
