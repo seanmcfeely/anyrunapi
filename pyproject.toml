@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "anyrunapi"
+version = "0.1.0"
+description = "Library and CLI tool for Any Run (any.run) malware sandbox api."
+authors = ["Sean McFeely <mcfeelynaes@gmail.com>"]
+license = "Apache 2.0"
+
+[tool.poetry.dependencies]
+python = "^3.6"
+requests = "^2.25.1"
+coloredlogs = "^15.0"
+argparse = "^1.4.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^6.2.3"
+pytest-mock = "^3.5.1"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+anyrun = "anyrunapi.cli:main"
+
+[tool.black]
+line-length = 120
