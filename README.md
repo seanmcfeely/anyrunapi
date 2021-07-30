@@ -21,12 +21,16 @@ anyrun = AnyRunClient(apikey)
 
 agent_tesla_task = "2f63c36f-e111-4ef4-b6da-ecb8655fc9c6"
 
+# private access (have to own the task)
 full_report = anyrun.get_report(agent_tesla_task)
 
+# public access
 report_summary = anyrun.get_report_summary(agent_tesla_task)
 
+# public access
 iocs = anyrun.get_report_iocs(agent_tesla_task)
 
+# public access
 result = anyrun.download_report_pcap(agent_tesla_task)
 if result:
     print(f"{agent_tesla_task}.anyrun.pcap written to disk.")
