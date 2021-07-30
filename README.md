@@ -6,6 +6,10 @@ I use this tool to programatically pull analysis artifacts/results for intel ing
 
 You can get an API key for the service [here](https://app.any.run/profile/).
 
+## Install
+
+`pip install anyrunapi`
+
 ## Library Use
 
 

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "anyrunapi"
-version = "0.1.0"
+version = "0.1.1"
 description = "Library and CLI tool for Any Run (any.run) malware sandbox api."
 authors = ["Sean McFeely <mcfeelynaes@gmail.com>"]
 license = "Apache 2.0"

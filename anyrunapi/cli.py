@@ -28,6 +28,9 @@ def main():
     parser.add_argument("-sh", "--show-history", action="store_true", help="Show analysis history.")
     parser.add_argument("-e", "--environments", action="store_true", help="Get AnyRun environments.")
     parser.add_argument("-u", "--user-limits", action="store_true", help="Get AnyRun user details.")
+    parser.add_argument(
+        "--raw-get", action="store", help="Supply a URL to attempt to stream any content from (pipe to file)."
+    )
 
     subparsers = parser.add_subparsers(dest="command")
     get_parser = subparsers.add_parser("get", help="Get analysis report data by task ID.")
@@ -66,6 +69,14 @@ def main():
             LOGGER.info("getting user limits.")
             print(anyrun.get_user())
             return True
+        elif args.raw_get:
+            LOGGER.info(f"Attempting to stream content from {args.raw_get}")
+            r = anyrun.get(args.raw_get)
+            with open("anyrun.raw_get.output", "wb") as fp:
+                fp.write(r.content)
+            if os.path.exists("anyrun.raw_get.output"):
+                print(f"wrote: anyrun.raw_get.output")
+            return
         elif args.command == "get":
             if args.pcap:
                 LOGGER.info(f"Downloading pcap for {args.task}")

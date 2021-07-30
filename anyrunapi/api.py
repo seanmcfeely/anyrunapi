@@ -1,5 +1,6 @@
-# AnyRun API lib and cli tool.
-# https://any.run/api-documentation/
+"""AnyRun API lib and cli tool.
+https://any.run/api-documentation/
+"""
 
 import os
 import json
@@ -10,30 +11,40 @@ import requests
 class AnyRunClient:
     logger = logging.getLogger("anyrunapi.AnyRunClient")
 
-    def __init__(self, api_key, host="api.any.run", verify_ssl=True):
+    def __init__(self, api_key, host="api.any.run", **requests_kwargs):
         self.api_key = api_key
         self.host = host
         self.url_api_base = f"https://{host}/v1/"
         self.url_report_base = f"https://{host}/"
         self.url_content_base = f"https://content.any.run/"
 
+        # set up the requests session
+        self.session = requests.Session()
+        self.session.headers = {"Authorization": f"API-Key {self.api_key}"}
+        # user-supplied dict of kwargs supplied to requests calls
+        self.requests_kwargs = requests_kwargs
+
     def _request(self, url, stream=True):
         logging.debug(f"making {url} request.")
-        r = requests.get(url, headers={"Authorization": f"API-Key {self.api_key}"}, stream=stream)
+        r = self.session.get(url, stream=stream, **self.requests_kwargs)
         r.raise_for_status()
         return r
 
     def _api_request(self, resource, stream=True):
         url = self.url_api_base + resource
-        return self._request(url)
+        return self._request(url, stream=stream)
 
     def _content_request(self, resource, stream=True):
         url = self.url_content_base + resource
-        return self._request(url)
+        return self._request(url, stream=stream)
 
     def _report_request(self, resource, stream=True):
         url = self.url_report_base + resource
-        return self._request(url)
+        return self._request(url, stream=stream)
+
+    def get(self, url, stream=True):
+        """Allows for embedded report URLs to be easily downloaded."""
+        return self._request(url, stream=stream)
 
     def get_environment(self):
         logging.debug("getting environment details.")
